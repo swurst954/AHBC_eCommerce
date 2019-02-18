@@ -51,20 +51,23 @@
 
 <button class="btn btn-default" id="getInventory">Get Inventory</button>
 
+
+<button class="btn btn-default" id="getOrder">Create Order</button>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
 
 
-<script language="javascript">
+    <script language="javascript">
 
     var id = @Html.ValueFor(model => model.ItemId);
-    
+
     $(document).ready(function () {
         $("#getInventory").click(function () {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:53413/api/values/"+ {id},
+                routeTemplate: "api/values/get/" + id,
                 success: function (data) {
                     alert(data);
                 },
@@ -73,7 +76,21 @@
                 }
             });
         });
-    });
-</script>
+        });
+        $(document).ready(function () {
+            $("#getOrder").click(function () {
+                $.ajax({
+                    type: "Delete",
+                    routeTemplate: "api/values/delete/" + id,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                });
+            });
+        });
+    </script>
 
 }
