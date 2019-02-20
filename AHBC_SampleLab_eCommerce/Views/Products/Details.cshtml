@@ -39,58 +39,32 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Price)
+            $@Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            Quantity
+        </dt>
+
+        <dd>
+            <span id="quantity"></span>
         </dd>
 
     </dl>
 </div>
+
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Order", "Create", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
 
-<button class="btn btn-default" id="getInventory">Get Inventory</button>
 
-
-<button class="btn btn-default" id="getOrder">Create Order</button>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-
-
-
+@section Scripts
+{
     <script language="javascript">
-
-    var id = @Html.ValueFor(model => model.ItemId);
-
-    $(document).ready(function () {
-        $("#getInventory").click(function () {
-            $.ajax({
-                type: "GET",
-                routeTemplate: "api/values/get/" + id,
-                success: function (data) {
-                    alert(data);
-                },
-                error: function () {
-                    alert("Error while inserting data");
-                }
-            });
-        });
-        });
-        $(document).ready(function () {
-            $("#getOrder").click(function () {
-                $.ajax({
-                    type: "Delete",
-                    routeTemplate: "api/values/delete/" + id,
-                    success: function (data) {
-                        alert(data);
-                    },
-                    error: function () {
-                        alert("Error while inserting data");
-                    }
-                });
-            });
-        });
+    $.get("http://localhost:53413/api/values/@Model.ItemId", function (data) {
+        $("#quantity").text(data.Quantity);
+    });
     </script>
-
 }

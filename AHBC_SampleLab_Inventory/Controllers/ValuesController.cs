@@ -6,9 +6,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace AHBC_SampleLab_Inventory.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class ValuesController : ApiController
     {
         private InventoryDBContext db = new InventoryDBContext();
@@ -22,11 +24,15 @@ namespace AHBC_SampleLab_Inventory.Controllers
         }
 
         // GET api/values/5
-        public IHttpActionResult Get(int? id)
+        public IHttpActionResult Get(int id)
         {
-            int invValue = db.Inventories.Find(id).Quantity;
+            Inventory inventory = db.Inventories.Find(id);
+            if (inventory == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(invValue);
+            return Ok(inventory);
         }
 
         // POST api/values

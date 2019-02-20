@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using AHBC_SampleLab_eCommerce.DAL;
 using AHBC_SampleLab_eCommerce.Models;
+using System.Net.Http;
+
 
 namespace AHBC_SampleLab_eCommerce.Controllers
 {
@@ -37,13 +39,40 @@ namespace AHBC_SampleLab_eCommerce.Controllers
             return View(product);
         }
 
+        public ActionResult Create(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewData["Id"] = id;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(Inventory inventory)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:53413/");
+            var response = await client.PutAsJsonAsync($"api/inventories/{inventory.ID}", inventory);
+
+
+
+            return RedirectToAction("Details", new { Id = inventory.ID });
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
+
     }
 }
